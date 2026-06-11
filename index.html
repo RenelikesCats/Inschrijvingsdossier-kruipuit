@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inschrijvingsfiche – GO! Basisschool De Kruipuit</title>
+    <script src="script.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen">
+
+<!-- ───── HEADER ───── -->
+<header class="school-header">
+    <span class="leaf-deco">🌿</span>
+    <div class="max-w-4xl mx-auto">
+        <p class="text-xs uppercase tracking-widest text-green-300 mb-1">GO! Basisschool</p>
+        <h1 class="text-3xl font-bold mb-1">Kruipuit</h1>
+        <p class="text-green-200 text-sm">Kruipuit 19A · 9991 Adegem</p>
+        <div class="mt-4 flex gap-6 text-sm text-green-100">
+            <span>📋 Inschrijvingsdossier</span>
+            <span id="hdr-jaar" class="opacity-70"></span>
+        </div>
+    </div>
+</header>
+
+<!-- ───── PROGRESS ───── -->
+<div class="progress max-w-4xl mx-auto px-4 pt-5">
+    <div class="flex items-center justify-between text-xs text-green-800 mb-1">
+        <span>Voortgang formulier</span>
+        <span id="progress-pct">0%</span>
+    </div>
+    <div class="h-2 bg-green-100 rounded-full overflow-hidden">
+        <div id="progress-bar" class="h-full rounded-full" style="width:0%;background:var(--gold)"></div>
+    </div>
+</div>
+
+<!-- ───── TABS ───── -->
+<div class="max-w-4xl mx-auto px-4 mt-6">
+    <nav id="tabs-nav" class="flex gap-1 border-b border-green-200 mb-6 overflow-x-auto">
+        <button class="tab-btn active px-4 py-2.5 text-sm whitespace-nowrap" data-tab="tab1">1 · Verklaring ouders</button>
+        <button class="tab-btn px-4 py-2.5 text-sm whitespace-nowrap" data-tab="tab2">2 · Inschrijvingsfiche</button>
+        <button class="tab-btn px-4 py-2.5 text-sm whitespace-nowrap" data-tab="tab3">3 · Medische fiche</button>
+        <button class="tab-btn px-4 py-2.5 text-sm whitespace-nowrap" data-tab="tab4">4 · Buitenschoolse opvang</button>
+        <button class="tab-btn px-4 py-2.5 text-sm whitespace-nowrap" data-tab="tab5">5 · Factuur &amp; Beeldmateriaal</button>
+    </nav>
+
+    <form id="main-form" novalidate>
+
+        <!-- ══════════════════════════════════════
+             TAB 1 – Verklaring ouders
+        ══════════════════════════════════════ -->
+        <div class="tab-pane active" id="tab1">
+
+            <div class="card">
+                <div class="section-title">Identificatie school</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label>Schooljaar</label>
+                        <input type="text" id="schooljaar" name="schooljaar" placeholder="bijv. 2025-2026" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Gegevens kind</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label>Naam leerling <span class="text-red-400">*</span></label>
+                        <input type="text" id="naam_kind" name="naam_kind" required placeholder="Volledige naam" />
+                    </div>
+                    <div>
+                        <label>Geboortedatum</label>
+                        <input type="date" id="geboortedatum" name="geboortedatum" />
+                    </div>
+                    <div>
+                        <label>Geboorteplaats</label>
+                        <input type="text" id="geboorteplaats" name="geboorteplaats" placeholder="Gemeente" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Inschrijvingsdetails</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label>Ingang van (datum)</label>
+                        <input type="date" id="ingang_datum" name="ingang_datum" />
+                    </div>
+                    <div>
+                        <label>Naam en adres vorige school</label>
+                        <input type="text" id="vorige_school" name="vorige_school" placeholder="Naam vorige school" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Handtekening ouder / voogd</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label>Naam en voornaam ouder/voogd <span class="text-red-400">*</span></label>
+                        <input type="text" id="naam_ouder" name="naam_ouder" required placeholder="Naam van de ondertekenende ouder/voogd" />
+                    </div>
+                    <div>
+                        <label>Datum</label>
+                        <input type="date" id="datum_verklaring" name="datum_verklaring" />
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label>Handtekening ouder/voogd</label>
+                    <div class="sig-wrap">
+                        <canvas class="sig-canvas empty" id="sig_tab1" data-sig="sig_tab1"></canvas>
+                        <span class="sig-placeholder" id="sig_tab1_ph">✍ Teken hier uw handtekening</span>
+                    </div>
+                    <div class="sig-actions">
+                        <button type="button" class="sig-btn" onclick="clearSig('sig_tab1')">✕ Wissen</button>
+                        <span class="sig-badge" id="sig_tab1_badge">✓ Ondertekend</span>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <label>Controle geboortedatum (kopie bijgevoegd?)</label>
+                    <div class="check-row">
+                        <input type="checkbox" id="kopie_geb" name="kopie_geb" />
+                        <label for="kopie_geb">Ja, kopie van identiteitsbewijs of geboortebewijs bijgevoegd</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end no-print">
+                <button type="button" onclick="switchTab('tab2')"
+                        class="px-6 py-2.5 rounded-lg text-white text-sm font-medium"
+                        style="background:var(--moss)">Volgende →</button>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════
+             TAB 2 – Inschrijvingsfiche
+        ══════════════════════════════════════ -->
+        <div class="tab-pane" id="tab2">
+
+            <div class="card">
+                <div class="section-title">Gegevens kind</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label>Naam kind</label>
+                        <input type="text" id="f2_naam_kind" name="f2_naam_kind" placeholder="Automatisch ingevuld" />
+                    </div>
+                    <div>
+                        <label>Klas</label>
+                        <input type="text" id="klas" name="klas" placeholder="bijv. 2A" />
+                    </div>
+                    <div>
+                        <label>Aanmeldingsdatum</label>
+                        <input type="date" id="aanmeldingsdatum" name="aanmeldingsdatum" />
+                    </div>
+                    <div>
+                        <label>Adres</label>
+                        <input type="text" id="adres" name="adres" placeholder="Straat, huisnummer, postcode gemeente" />
+                    </div>
+                    <div>
+                        <label>Instapdatum</label>
+                        <input type="date" id="instapdatum" name="instapdatum" />
+                    </div>
+                    <div>
+                        <label>Geboortedatum</label>
+                        <input type="date" id="f2_geboortedatum" name="f2_geboortedatum" />
+                    </div>
+                    <div>
+                        <label>Geboorteplaats</label>
+                        <input type="text" id="f2_geboorteplaats" name="f2_geboorteplaats" placeholder="Automatisch ingevuld" />
+                    </div>
+                    <div>
+                        <label>Rijksregisternummer</label>
+                        <input type="text" id="rijksregister_kind" name="rijksregister_kind" placeholder="bijv. 00.00.00-000.00" />
+                    </div>
+                    <div>
+                        <label>Nationaliteit</label>
+                        <input type="text" id="nationaliteit" name="nationaliteit" placeholder="bijv. Belgisch" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Contactgegevens ouders</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label>E-mailadres ouders</label>
+                        <input type="email" id="email_ouders" name="email_ouders" placeholder="naam@voorbeeld.be" />
+                    </div>
+                    <div>
+                        <label>Andere te verwittigen personen</label>
+                        <input type="text" id="andere_contacten" name="andere_contacten" placeholder="Naam + telefoonnummer" />
+                    </div>
+                    <div>
+                        <label>Naam vader(s)</label>
+                        <input type="text" id="naam_vader" name="naam_vader" placeholder="Volledige naam" />
+                    </div>
+                    <div>
+                        <label>Naam moeder(s)</label>
+                        <input type="text" id="naam_moeder" name="naam_moeder" placeholder="Volledige naam" />
+                    </div>
+                    <div>
+                        <label>Kind ten laste bij</label>
+                        <input type="text" id="ten_laste" name="ten_laste" placeholder="bijv. beide ouders / vader / moeder" />
+                    </div>
+                    <div></div>
+                    <div>
+                        <label>Rijksregisternummer vader</label>
+                        <input type="text" id="rijksregister_vader" name="rijksregister_vader" placeholder="bijv. 00.00.00-000.00" />
+                    </div>
+                    <div>
+                        <label>Rijksregisternummer moeder</label>
+                        <input type="text" id="rijksregister_moeder" name="rijksregister_moeder" placeholder="bijv. 00.00.00-000.00" />
+                    </div>
+                    <div>
+                        <label>Telefoon vader</label>
+                        <input type="tel" id="tel_vader" name="tel_vader" placeholder="+32 ..." />
+                    </div>
+                    <div>
+                        <label>Telefoon moeder</label>
+                        <input type="tel" id="tel_moeder" name="tel_moeder" placeholder="+32 ..." />
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Overige info</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label>Huisdokter</label>
+                        <input type="text" id="huisdokter" name="huisdokter" placeholder="Naam huisarts" />
+                    </div>
+                    <div>
+                        <label>Vorige school</label>
+                        <input type="text" id="f2_vorige_school" name="f2_vorige_school" placeholder="Automatisch ingevuld" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Handtekening</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label>Datum</label>
+                        <input type="date" id="datum_fiche" name="datum_fiche" />
+                    </div>
+                    <div>
+                        <label>Naam ouder(s)</label>
+                        <input type="text" id="f2_naam_ouder" name="f2_naam_ouder" placeholder="Automatisch ingevuld" />
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label>Handtekening ouder(s)</label>
+                    <div class="sig-wrap">
+                        <canvas class="sig-canvas empty" id="sig_tab2" data-sig="sig_tab2"></canvas>
+                        <span class="sig-placeholder" id="sig_tab2_ph">✍ Teken hier uw handtekening</span>
+                    </div>
+                    <div class="sig-actions">
+                        <button type="button" class="sig-btn" onclick="clearSig('sig_tab2')">✕ Wissen</button>
+                        <span class="sig-badge" id="sig_tab2_badge">✓ Ondertekend</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between no-print">
+                <button type="button" onclick="switchTab('tab1')"
+                        class="px-6 py-2.5 rounded-lg border border-green-700 text-green-800 text-sm font-medium">← Vorige</button>
+                <button type="button" onclick="switchTab('tab3')"
+                        class="px-6 py-2.5 rounded-lg text-white text-sm font-medium" style="background:var(--moss)">Volgende →</button>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════
+             TAB 3 – Medische fiche
+        ══════════════════════════════════════ -->
+        <div class="tab-pane" id="tab3">
+
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-5 text-sm text-amber-800">
+                <strong>Vertrouwelijk.</strong> Deze informatie blijft strikt vertrouwelijk. Zonder doktersattest dient de school geen medicijnen toe.
+            </div>
+
+            <div class="card">
+                <div class="section-title">Identificatie</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label>Naam leerling</label>
+                        <input type="text" id="med_naam" name="med_naam" placeholder="Automatisch ingevuld" />
+                    </div>
+                    <div>
+                        <label>Klas</label>
+                        <input type="text" id="med_klas" name="med_klas" placeholder="Automatisch ingevuld" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Allergieën &amp; voorzorgen</div>
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label>Allergisch aan</label>
+                        <textarea id="allergisch" name="allergisch" placeholder="Beschrijf eventuele allergieën..."></textarea>
+                    </div>
+                    <div>
+                        <label>Voorzorgen</label>
+                        <textarea id="voorzorgen" name="voorzorgen" placeholder="Te nemen voorzorgen..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Medicatie</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label>Dagelijkse medicatie</label>
+                        <input type="text" id="medicatie" name="medicatie" placeholder="Naam medicament" />
+                    </div>
+                    <div>
+                        <label>Dosering</label>
+                        <input type="text" id="dosering" name="dosering" placeholder="bijv. 1 tablet" />
+                    </div>
+                    <div>
+                        <label>Tijdstip en frequentie</label>
+                        <input type="text" id="tijdstip" name="tijdstip" placeholder="bijv. 's middags, 1x/dag" />
+                    </div>
+                    <div>
+                        <label>Hoe bewaren</label>
+                        <input type="text" id="bewaren" name="bewaren" placeholder="bijv. koel en droog" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Overige medische info</div>
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label>Andere belangrijke medische informatie</label>
+                        <textarea id="andere_medisch" name="andere_medisch" placeholder="Geef hier andere relevante medische info..."></textarea>
+                    </div>
+                    <div>
+                        <label>Te verwittigen in nood</label>
+                        <input type="text" id="nood_contact" name="nood_contact" placeholder="Naam + telefoonnummer" />
+                    </div>
+                    <div>
+                        <label>Naam + telefoonnummer geneesheer</label>
+                        <input type="text" id="med_arts" name="med_arts" placeholder="Naam + (…/…)" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Handtekeningen</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label>Naam ouder(s)</label>
+                        <input type="text" id="med_ouder_naam" name="med_ouder_naam" placeholder="Automatisch ingevuld" class="mb-3" />
+                        <label>Handtekening ouders</label>
+                        <div class="sig-wrap">
+                            <canvas class="sig-canvas empty" id="sig_tab3_ouder" data-sig="sig_tab3_ouder"></canvas>
+                            <span class="sig-placeholder" id="sig_tab3_ouder_ph">✍ Teken hier</span>
+                        </div>
+                        <div class="sig-actions">
+                            <button type="button" class="sig-btn" onclick="clearSig('sig_tab3_ouder')">✕ Wissen</button>
+                            <span class="sig-badge" id="sig_tab3_ouder_badge">✓ Ondertekend</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label>Naam geneesheer</label>
+                        <input type="text" id="med_arts_naam" name="med_arts_naam" placeholder="Naam geneesheer" class="mb-3" />
+                        <label>Handtekening geneesheer</label>
+                        <div class="sig-wrap">
+                            <canvas class="sig-canvas empty" id="sig_tab3_arts" data-sig="sig_tab3_arts"></canvas>
+                            <span class="sig-placeholder" id="sig_tab3_arts_ph">✍ Teken hier</span>
+                        </div>
+                        <div class="sig-actions">
+                            <button type="button" class="sig-btn" onclick="clearSig('sig_tab3_arts')">✕ Wissen</button>
+                            <span class="sig-badge" id="sig_tab3_arts_badge">✓ Ondertekend</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between no-print">
+                <button type="button" onclick="switchTab('tab2')"
+                        class="px-6 py-2.5 rounded-lg border border-green-700 text-green-800 text-sm font-medium">← Vorige</button>
+                <button type="button" onclick="switchTab('tab4')"
+                        class="px-6 py-2.5 rounded-lg text-white text-sm font-medium" style="background:var(--moss)">Volgende →</button>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════
+             TAB 4 – Buitenschoolse opvang
+        ══════════════════════════════════════ -->
+        <div class="tab-pane" id="tab4">
+
+            <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-5 text-sm text-green-900">
+                🕐 <strong>Opvangtijden:</strong> Elke ochtend vanaf <strong>7u00</strong> · Elke avond tot <strong>18u15</strong> · Woensdagmiddag van <strong>12u20 tot 16u30</strong>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Gegevens kind</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label>Naam van het kind</label>
+                        <input type="text" id="opv_naam" name="opv_naam" placeholder="Automatisch ingevuld" />
+                    </div>
+                    <div>
+                        <label>Geboortedatum</label>
+                        <input type="date" id="opv_geboortedatum" name="opv_geboortedatum" />
+                    </div>
+                    <div>
+                        <label>Adres</label>
+                        <input type="text" id="opv_adres" name="opv_adres" placeholder="Automatisch ingevuld" />
+                    </div>
+                    <div>
+                        <label>Klas</label>
+                        <input type="text" id="opv_klas" name="opv_klas" placeholder="Automatisch ingevuld" />
+                    </div>
+                    <div>
+                        <label>Telefoonnummer(s)</label>
+                        <input type="text" id="opv_tel" name="opv_tel" placeholder="Automatisch ingevuld (vader + moeder)" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Afhalingen</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label>Wie brengt het kind naar de opvang?</label>
+                        <input type="text" id="wie_brengt" name="wie_brengt" placeholder="Naam + relatie" />
+                    </div>
+                    <div>
+                        <label>Wie haalt het kind af?</label>
+                        <input type="text" id="wie_haalt" name="wie_haalt" placeholder="Naam + relatie" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Medisch contact</div>
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label>Naam en telefoonnummer van de huisarts</label>
+                        <input type="text" id="opv_huisarts" name="opv_huisarts" placeholder="Automatisch ingevuld" />
+                    </div>
+                    <div>
+                        <label>Bijzondere opmerkingen</label>
+                        <textarea id="opv_opmerkingen" name="opv_opmerkingen" placeholder="Eventuele opmerkingen voor de opvang..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between no-print">
+                <button type="button" onclick="switchTab('tab3')"
+                        class="px-6 py-2.5 rounded-lg border border-green-700 text-green-800 text-sm font-medium">← Vorige</button>
+                <button type="button" onclick="switchTab('tab5')"
+                        class="px-6 py-2.5 rounded-lg text-white text-sm font-medium" style="background:var(--moss)">Volgende →</button>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════
+             TAB 5 – Factuur & Beeldmateriaal
+        ══════════════════════════════════════ -->
+        <div class="tab-pane" id="tab5">
+
+            <!-- Factuur strookje -->
+            <div class="card">
+                <div class="section-title">Elektronische factuur</div>
+                <p class="text-sm text-gray-600 mb-4">Vanaf heden sturen we maandelijkse facturen per elektronische post. We vragen uw toestemming hiervoor.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label>Ouder van (naam kind)</label>
+                        <input type="text" id="fac_naam_kind" name="fac_naam_kind" placeholder="Automatisch ingevuld" />
+                    </div>
+                    <div>
+                        <label>Klas</label>
+                        <input type="text" id="fac_klas" name="fac_klas" placeholder="Automatisch ingevuld" />
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label>E-mailadres voor facturen</label>
+                        <input type="email" id="fac_email" name="fac_email" placeholder="Automatisch ingevuld" />
+                    </div>
+                </div>
+                <div class="check-row mt-3">
+                    <input type="checkbox" id="akkoord_factuur" name="akkoord_factuur" />
+                    <label for="akkoord_factuur">Ik ga akkoord dat ik alle facturen uitsluitend per elektronische post ontvang. Ik weet dat ik deze toestemming steeds kan intrekken via <a href="mailto:secretariaat@schoolkruipuit.be" class="underline text-green-700">secretariaat@schoolkruipuit.be</a>.</label>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <div>
+                        <label>Naam</label>
+                        <input type="text" id="fac_naam_ouder" name="fac_naam_ouder" placeholder="Automatisch ingevuld" />
+                    </div>
+                    <div>
+                        <label>Handtekening</label>
+                        <div class="sig-wrap">
+                            <canvas class="sig-canvas empty" id="sig_tab5_fac" data-sig="sig_tab5_fac"></canvas>
+                            <span class="sig-placeholder" id="sig_tab5_fac_ph">✍ Teken hier</span>
+                        </div>
+                        <div class="sig-actions">
+                            <button type="button" class="sig-btn" onclick="clearSig('sig_tab5_fac')">✕ Wissen</button>
+                            <span class="sig-badge" id="sig_tab5_fac_badge">✓ Ondertekend</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Beeldmateriaal -->
+            <div class="card">
+                <div class="section-title">Toestemming beeldmateriaal</div>
+                <p class="text-sm text-gray-600 mb-4">Wij, ouders (wettelijke vertegenwoordigers) van:</p>
+                <div class="mb-4">
+                    <label>Naam van het kind</label>
+                    <input type="text" id="beeld_naam_kind" name="beeld_naam_kind" placeholder="Automatisch ingevuld" />
+                </div>
+
+                <p class="text-sm font-semibold text-gray-700 mb-2">Verklaren dat de onderwijsinstelling beelden van ons kind:</p>
+
+                <div class="space-y-2 mb-4">
+                    <div class="check-row">
+                        <input type="checkbox" id="beeld_website" name="beeld_website" />
+                        <label for="beeld_website">Mag plaatsen op de openbare website of sociale media</label>
+                    </div>
+                    <div class="check-row">
+                        <input type="checkbox" id="beeld_intern" name="beeld_intern" />
+                        <label for="beeld_intern">Mag plaatsen op interne digitale kanalen (Gimme, klasgroep, …)</label>
+                    </div>
+                    <div class="check-row">
+                        <input type="checkbox" id="beeld_print" name="beeld_print" />
+                        <label for="beeld_print">Mag plaatsen in gedrukte publicaties zoals een nieuwsbrief, folders of affiches</label>
+                    </div>
+                    <div class="check-row">
+                        <input type="checkbox" id="beeld_krant" name="beeld_krant" />
+                        <label for="beeld_krant">Mag plaatsen in een krantenartikel of een televisie-uitzending om de werking van de onderwijsinstelling bekend te maken</label>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-800 mb-4">
+                    ℹ️ U kunt uw beslissing op elk moment herzien en heeft het recht beeldmateriaal te laten verwijderen. Contacteer hiervoor: <a href="mailto:directie@schoolkruipuit.be" class="underline">directie@schoolkruipuit.be</a>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label>Datum</label>
+                        <input type="date" id="beeld_datum" name="beeld_datum" />
+                    </div>
+                    <div>
+                        <label>Naam ouders</label>
+                        <input type="text" id="beeld_naam_ouder" name="beeld_naam_ouder" placeholder="Automatisch ingevuld" />
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label>Handtekening ouders</label>
+                        <div class="sig-wrap">
+                            <canvas class="sig-canvas empty" id="sig_tab5_beeld" data-sig="sig_tab5_beeld"></canvas>
+                            <span class="sig-placeholder" id="sig_tab5_beeld_ph">✍ Teken hier uw handtekening</span>
+                        </div>
+                        <div class="sig-actions">
+                            <button type="button" class="sig-btn" onclick="clearSig('sig_tab5_beeld')">✕ Wissen</button>
+                            <span class="sig-badge" id="sig_tab5_beeld_badge">✓ Ondertekend</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-between gap-3 no-print">
+                <button type="button" onclick="switchTab('tab4')"
+                        class="px-6 py-2.5 rounded-lg border border-green-700 text-green-800 text-sm font-medium">← Vorige</button>
+                <div class="flex gap-3">
+                    <button type="button" onclick="window.print()"
+                            class="px-6 py-2.5 rounded-lg border border-gray-400 text-gray-700 text-sm font-medium">🖨 Afdrukken</button>
+                    <button type="submit"
+                            class="px-8 py-2.5 rounded-lg text-white text-sm font-semibold"
+                            style="background:var(--forest)">✅ Formulier voltooien</button>
+                </div>
+            </div>
+        </div>
+
+    </form><!-- /main-form -->
+
+    <p class="text-center text-xs text-gray-400 mt-10 mb-6 no-print">
+        GO! Basisschool De Kruipuit · <a href="mailto:secretariaat@schoolkruipuit.be" class="underline">secretariaat@schoolkruipuit.be</a>
+    </p>
+</div><!-- /max-w-4xl -->
+
+<!-- ══════════════════════════════════════
+     SUCCESS TOAST
+══════════════════════════════════════ -->
+<div id="toast" class="fixed bottom-6 right-6 hidden no-print">
+    <div class="bg-green-800 text-white text-sm px-5 py-3.5 rounded-xl shadow-xl flex items-center gap-3">
+        <span>✅</span>
+        <span>Formulier opgeslagen! Druk af of stuur in.</span>
+    </div>
+</div>
+
+</body>
+</html>
