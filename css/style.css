@@ -247,11 +247,16 @@ textarea {
     }
 
     .school-header {
-        padding: 1rem 1.5rem 1.5rem;
+        padding: 1.25rem 1.5rem 1.75rem;
+        border-bottom: 3px solid var(--gold);
     }
 
     .school-header::after {
         display: none;
+    }
+
+    .leaf-deco {
+        display: none !important;
     }
 
     #progress-bar, #progress-pct, .max-w-4xl > p:last-child {
@@ -284,23 +289,46 @@ textarea {
     /* cards */
     .card {
         box-shadow: none !important;
-        border: 1px solid #bbb !important;
-        border-radius: 6px !important;
-        padding: 0.75rem 1rem !important;
+        background: #fff !important;
+        border: 1px solid #d4e2d9 !important;
+        border-radius: 10px !important;
+        padding: 0.85rem 1.1rem !important;
         margin-bottom: 0.6rem !important;
         break-inside: avoid;
     }
 
     .section-title {
-        font-size: 8pt;
+        font-size: 8.5pt;
+        color: var(--moss) !important;
         margin-bottom: 0.5rem !important;
         page-break-after: avoid !important;
         break-after: avoid !important;
     }
 
-    .bg-amber-50, .bg-green-50, .bg-blue-50 {
-        background: #f9f9f9 !important;
-        border: 1px solid #ccc !important;
+    .section-title::before {
+        background: var(--gold) !important;
+    }
+
+    .bg-amber-50 {
+        background: #fffbeb !important;
+        border-color: #fde68a !important;
+        color: #92400e !important;
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+    }
+
+    .bg-green-50 {
+        background: #f0fdf4 !important;
+        border-color: #bbf7d0 !important;
+        color: #14532d !important;
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+    }
+
+    .bg-blue-50 {
+        background: #eff6ff !important;
+        border-color: #bfdbfe !important;
+        color: #1e3a8a !important;
         page-break-after: avoid !important;
         break-after: avoid !important;
     }
@@ -329,11 +357,12 @@ textarea {
     /* inputs: look like print fields */
     input[type=text], input[type=date], input[type=email], input[type=tel], textarea, select {
         border: none !important;
-        border-bottom: 1px solid #555 !important;
+        border-bottom: 1px solid var(--sage) !important;
         border-radius: 0 !important;
         background: transparent !important;
         padding: 2px 0 !important;
         font-size: 9pt !important;
+        color: var(--forest) !important;
         box-shadow: none !important;
     }
 
@@ -343,7 +372,8 @@ textarea {
 
     label {
         font-size: 7.5pt !important;
-        color: #444 !important;
+        color: var(--moss) !important;
+        font-weight: 600 !important;
         margin-bottom: 1px !important;
     }
 
@@ -354,14 +384,16 @@ textarea {
 
     .check-row label {
         font-size: 8.5pt !important;
+        color: #2d3f35 !important;
+        font-weight: 400 !important;
     }
 
     /* signature canvas */
     .sig-canvas {
         height: 70px !important;
-        border: 1px solid #888 !important;
-        border-radius: 4px !important;
-        background: #fff !important;
+        border: 1px solid var(--sage) !important;
+        border-radius: 6px !important;
+        background: var(--mist) !important;
     }
 
     /* layout containers */
@@ -410,6 +442,7 @@ textarea {
     #tab4::before { content: "4 · Buitenschoolse opvang"; }
     #tab5::before { content: "5 · Factuur & Beeldmateriaal"; }
 }
+
 
 /* school header */
 .school-header {
