@@ -18,10 +18,9 @@
 <header class="school-header">
     <span class="leaf-deco">🌿</span>
     <div class="max-w-4xl mx-auto">
-        <p class="text-xs uppercase tracking-widest text-green-300 mb-1">GO! Basisschool</p>
-        <h1 class="text-3xl font-bold mb-1">Kruipuit</h1>
-        <p class="text-green-200 text-sm">Kruipuit 19A · 9991 Adegem</p>
-        <div class="mt-4 flex gap-6 text-sm text-green-100">
+        <img src="logo.png" alt="GO! Basisschool De Kruipuit" class="h-24 mb-6" />
+
+        <div class="mt-4 mb-4 flex gap-6 text-sm text-black-100">
             <span>📋 Inschrijvingsdossier</span>
             <span id="hdr-jaar" class="opacity-70"></span>
         </div>
@@ -35,7 +34,7 @@
         <span id="progress-pct">0%</span>
     </div>
     <div class="h-2 bg-green-100 rounded-full overflow-hidden">
-        <div id="progress-bar" class="h-full rounded-full" style="width:0%;background:var(--gold)"></div>
+        <div id="progress-bar" class="h-full rounded-full" style="width:0%;background:var(--sage)"></div>
     </div>
 </div>
 
@@ -63,7 +62,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label>Schooljaar</label>
-                        <input type="text" id="schooljaar" name="schooljaar" placeholder="bijv. 2025-2026"/>
+                        <input type="text" id="schooljaar" name="schooljaar" value="2026 - 2027" placeholder="bijv. 2025-2026"/>
                     </div>
                 </div>
             </div>
@@ -372,16 +371,23 @@
                         <label>Te verwittigen in nood</label>
                         <input type="text" id="nood_contact" name="nood_contact" placeholder="Naam + telefoonnummer"/>
                     </div>
+
                     <div>
-                        <label>Naam + telefoonnummer geneesheer</label>
-                        <input type="text" id="med_arts" name="med_arts" placeholder="Naam + (…/…)"/>
+                        <label>Naam geneesheer</label>
+                        <input type="text" id="med_arts_naam" name="med_arts_naam" placeholder="Naam geneesheer"
+                               class="mb-3"/>
+                    </div>
+
+                    <div>
+                        <label>Telefoonnummer geneesheer</label>
+                        <input type="text" id="med_arts" name="med_arts" placeholder="+32 ..."/>
                     </div>
                 </div>
             </div>
 
             <div class="card">
                 <div class="section-title">Handtekeningen</div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-1 gap-6">
                     <div>
                         <label>Naam ouder(s)</label>
                         <input type="text" id="med_ouder_naam" name="med_ouder_naam" placeholder="Automatisch ingevuld"
@@ -396,20 +402,7 @@
                             <span class="sig-badge" id="sig_tab3_ouder_badge">✓ Ondertekend</span>
                         </div>
                     </div>
-                    <div>
-                        <label>Naam geneesheer</label>
-                        <input type="text" id="med_arts_naam" name="med_arts_naam" placeholder="Naam geneesheer"
-                               class="mb-3"/>
-                        <label>Handtekening geneesheer</label>
-                        <div class="sig-wrap">
-                            <canvas class="sig-canvas empty" id="sig_tab3_arts" data-sig="sig_tab3_arts"></canvas>
-                            <span class="sig-placeholder" id="sig_tab3_arts_ph">✍ Teken hier</span>
-                        </div>
-                        <div class="sig-actions">
-                            <button type="button" class="sig-btn" onclick="clearSig('sig_tab3_arts')">✕ Wissen</button>
-                            <span class="sig-badge" id="sig_tab3_arts_badge">✓ Ondertekend</span>
-                        </div>
-                    </div>
+
                 </div>
             </div>
 

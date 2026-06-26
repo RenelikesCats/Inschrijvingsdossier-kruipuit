@@ -32,7 +32,7 @@ const syncMap = {
     // Adres
     adres: ['opv_adres'],
     // Huisdokter
-    huisdokter: ['opv_huisarts'],
+    huisdokter: ['opv_huisarts', 'med_arts_naam'],
     // Email
     email_ouders: ['fac_email'],
     // Telefoon ouder1 + ouder2 → opvang tel (combined)
@@ -113,7 +113,7 @@ const sigStates = {}; // canvasId → { drawing, lastX, lastY, isEmpty, snapshot
 
 const allSigIds = [
     'sig_tab1', 'sig_tab2',
-    'sig_tab3_ouder', 'sig_tab3_arts',
+    'sig_tab3_ouder',
     'sig_tab5_fac', 'sig_tab5_beeld'
 ];
 

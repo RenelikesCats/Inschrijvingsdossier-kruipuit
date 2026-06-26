@@ -413,8 +413,9 @@ textarea {
 
 /* school header */
 .school-header {
-    background: linear-gradient(135deg, var(--forest) 0%, var(--moss) 60%, var(--sage) 100%);
-    color: #fff;
+    /*background: linear-gradient(135deg, #ffffff 0%, #e4e4e4 25%, var(--sage) 100%);*/
+    background: #eeffce;
+    color: var(--forest);
     padding: 2.5rem 2rem 2rem;
     position: relative;
     overflow: hidden;
@@ -428,7 +429,9 @@ textarea {
     right: 0;
     height: 36px;
     background: var(--cream);
-    clip-path: ellipse(55% 100% at 50% 100%);
+
+    /*gebogen */
+    /*clip-path: ellipse(55% 100% at 50% 100%);*/
 }
 
 .leaf-deco {
