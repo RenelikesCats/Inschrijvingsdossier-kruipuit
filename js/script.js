@@ -35,9 +35,9 @@ const syncMap = {
     huisdokter: ['opv_huisarts'],
     // Email
     email_ouders: ['fac_email'],
-    // Telefoon vader + moeder → opvang tel (combined)
-    tel_vader: [],
-    tel_moeder: [],
+    // Telefoon ouder1 + ouder2 → opvang tel (combined)
+    tel_ouder1: [],
+    tel_ouder2: [],
     // Aanmeldingsdatum sync with ingang_datum for instapdatum hint
     ingang_datum: ['instapdatum'],
 };
@@ -58,11 +58,10 @@ function syncField(sourceId, value) {
     });
 }
 
-// Combined phone sync
 function syncPhones() {
-    const vader = document.getElementById('tel_vader').value.trim();
-    const moeder = document.getElementById('tel_moeder').value.trim();
-    const combined = [vader, moeder].filter(Boolean).join(' / ');
+    const ouder1 = document.getElementById('tel_ouder1').value.trim();
+    const ouder2 = document.getElementById('tel_ouder2').value.trim();
+    const combined = [ouder1, ouder2].filter(Boolean).join(' / ');
     const el = document.getElementById('opv_tel');
     if (el && el.value !== combined) {
         el.value = combined;
@@ -70,13 +69,12 @@ function syncPhones() {
     }
 }
 
-// Attach listeners to all source fields
 Object.keys(syncMap).forEach(sid => {
     const el = document.getElementById(sid);
     if (!el) return;
     el.addEventListener('input', () => {
         syncField(sid, el.value);
-        if (sid === 'tel_vader' || sid === 'tel_moeder') syncPhones();
+        if (sid === 'tel_ouder1' || sid === 'tel_ouder2') syncPhones();
     });
 });
 
@@ -86,7 +84,7 @@ Object.keys(syncMap).forEach(sid => {
 const requiredIds = [
     'naam_kind','geboortedatum','naam_ouder',
     'adres','klas','email_ouders',
-    'naam_vader','naam_moeder','tel_vader','tel_moeder',
+    'naam_ouder1','naam_ouder2','tel_ouder1','tel_ouder2',
     'huisdokter','rijksregister_kind'
 ];
 
@@ -125,7 +123,6 @@ function ensureState(id) {
     return sigStates[id];
 }
 
-// Apply consistent ctx style — called before every draw operation
 function applyCtxStyle(ctx) {
     ctx.strokeStyle = '#1a2e22';
     ctx.lineWidth   = 2.2;
@@ -133,7 +130,6 @@ function applyCtxStyle(ctx) {
     ctx.lineJoin    = 'round';
 }
 
-// Size canvas buffer to its CSS display size, restore snapshot
 function sizeCanvas(canvas) {
     const id    = canvas.id;
     const state = ensureState(id);
@@ -181,10 +177,8 @@ function initSig(canvasId) {
     const canvas = document.getElementById(canvasId);
     if (!canvas) return;
 
-    // Always resize — fixes blank-canvas-after-tab-switch
     sizeCanvas(canvas);
 
-    // Only attach listeners once (flag on the element)
     if (canvas._sigListened) return;
     canvas._sigListened = true;
 
@@ -267,10 +261,8 @@ function clearSig(canvasId) {
     if (badge) badge.classList.remove('visible');
 }
 
-// Init on page load (tab1 is visible)
 window.addEventListener('load', () => allSigIds.forEach(initSig));
 
-// Re-size/init on every tab switch (canvas must be visible for correct sizing)
 const _origSwitchTab = switchTab;
 window.switchTab = function(id) {
     _origSwitchTab(id);
@@ -278,7 +270,6 @@ window.switchTab = function(id) {
     requestAnimationFrame(() => requestAnimationFrame(() => allSigIds.forEach(initSig)));
 };
 
-// Also re-size on window resize
 window.addEventListener('resize', () => {
     allSigIds.forEach(id => {
         const canvas = document.getElementById(id);
